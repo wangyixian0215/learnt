@@ -1,0 +1,103 @@
+{extend name="index/public"}
+{block name="Addproductcategory"}
+<script>
+    $(function(){
+        $("input[name='button']").click(function(){
+            var admin_name=$("input[name='admin_name']").val().trim();
+            var admin_tel=$("input[name='admin_tel']").val().trim();
+            var admin_email=$("input[name='admin_email']").val().trim();
+            var admin_pwd=$("input[name='admin_pwd']").val().trim();
+            var admin_repwd=$("input[name='admin_repwd']").val().trim();
+            var role_id=[];//定义一个数组
+            $("input[name='role_id']:checked").each(function(){
+                role_id.push($(this).val());//将选中的值添加到数组chk_value中
+            });
+            $.ajax({
+               type:"post",
+                url:"",
+                data:{
+                    admin_name:admin_name,
+                    admin_tel:admin_tel,
+                    admin_email:admin_email,
+                    admin_pwd:admin_pwd,
+                    admin_repwd:admin_repwd,
+                    role_id:role_id
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.status==1){
+                        window.location.href="{:url('Admin/showAdmin')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+
+                }
+            });
+        });
+
+    });
+</script>
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>添加管理员</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('Admin/showAdmin')}" class="actionBtn">管理员管理</a>添加管理员</h3>
+    <!--<form action="{:url('Role/addRole')}" method="post">-->
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+        <tr>
+            <td width="80" align="right">管理员名</td>
+            <td>
+                <input type="text" name="admin_name" value=""  class="inpMain" />
+            </td>
+        </tr>
+        <tr>
+            <td width="80" align="right">电话</td>
+            <td>
+                <input type="text" name="admin_tel" value=""  class="inpMain" />
+            </td>
+        </tr>
+        <tr>
+            <td width="80" align="right">Email</td>
+            <td>
+                <input type="text" name="admin_email" value=""  class="inpMain" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right">密码</td>
+            <td>
+                <input type="password" name="admin_pwd" value=""  class="inpMain" />
+            </td>
+        </tr>
+        <tr>
+            <td align="right">确认密码</td>
+            <td>
+                <input type="password" name="admin_repwd" value=""  class="inpMain" />
+            </td>
+        </tr>
+
+
+        <tr>
+            <td align="right">角色选择</td>
+            <td>
+                {foreach $role as $key=>$val}
+                <input type="checkbox" name="role_id" id="" value="{$val.role_id}">{$val.role_name}
+                {/foreach}
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td>
+                <!--<input type="hidden" name="token" value="b9439ae8" />-->
+                <!--<input type="hidden" name="cat_id" value="" />-->
+                <input type="button" value="提交" name="button">
+                <!--<input type="submit" value="提交">-->
+                <input type="reset" value="重置">
+            </td>
+        </tr>
+    </table>
+    <!--</form>-->
+</div>
+
+</div>
+<div class="clear"></div>
+{/block}

@@ -1,0 +1,39 @@
+{extend name="index/public"}
+{block name="productCategory"}
+
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>权限管理</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('node/addNode')}" class="actionBtn add">添加权限</a>权限管理</h3>
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+        <thead>
+        <tr>
+            <th>权限名称</th>
+            <th>权限描述</th>
+            <th>是否菜单</th>
+            <th>权限控制器</th>
+            <th>权限方法</th>
+            <th>权限路径</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $node as $key=>$vo}
+        <tr>
+            <td>{:str_repeat("　　",$vo.node_level)}{$vo.node_name}</td>
+            <td>{$vo.node_desc}</td>
+            <td>{eq name="$vo.node_ismenue" value="1"}展示{else/}不展示{/eq}</td>
+            <td>{$vo.node_controller}</td>
+            <td>{$vo.node_action}</td>
+            <td>{$vo.node_url}</td>
+            <td><a href="{:url('Productcategory/Updateproductcategory')}">编辑</a> | <a href="javascript:void(0)" class="del">删除</a></td>
+        </tr>
+        {/foreach}
+
+        </tbody>
+
+    </table>
+</div>
+</div>
+<div class="clear"></div>
+{/block}

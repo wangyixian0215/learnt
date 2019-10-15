@@ -1,0 +1,77 @@
+{extend name="index/public"}
+{block name="Addproductcategory"}
+<script>
+    $(function(){
+        $("input[name='button']").click(function(){
+            var admin_name=$("#admin_name").attr("value");
+            var admin_id=$("input[name='admin_id']").val().trim();
+            var role_id=[];//定义一个数组
+            $("input[name='role_id']:checked").each(function(){
+                role_id.push($(this).val());//将选中的值添加到数组chk_value中
+            });
+            $.ajax({
+                type:"post",
+                url:"",
+                data:{
+                    admin_name:admin_name,
+                    role_id:role_id,
+                    admin_id:admin_id
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.status==1){
+                        window.location.href="{:url('Admin/showAdmin')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+
+                }
+            });
+        });
+
+    });
+</script>
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>编辑管理员权限</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('Admin/showAdmin')}" class="actionBtn">管理员管理</a>编辑管理员权限</h3>
+    <!--<form action="{:url('Role/addRole')}" method="post">-->
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+        <tr>
+            <td width="80" align="right">管理员名</td>
+            <td>
+                <span id="admin_name" class="inpMain" value="{$admin.admin_name}">{$admin.admin_name}</span>
+
+            </td>
+            <input type="text" name="admin_id" id="" value="{$admin.admin_id}" hidden>
+        </tr>
+        <tr>
+            <td align="right">角色选择</td>
+            <td>
+                {foreach $role as $k=>$v}
+                <input type="checkbox" name="role_id" id=""  value="{$v.role_id}"
+                       {foreach $admin.role_name as $key=>$val}
+                {if $val==$v.role_id} checked {/if}
+                {/foreach}
+                >
+                {$v.role_name}
+                {/foreach}
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <!--<input type="hidden" name="token" value="b9439ae8" />-->
+                <!--<input type="hidden" name="cat_id" value="" />-->
+                <input type="button" value="提交" name="button">
+                <!--<input type="submit" value="提交">-->
+                <input type="reset" value="重置">
+            </td>
+        </tr>
+    </table>
+    <!--</form>-->
+</div>
+
+</div>
+<div class="clear"></div>
+{/block}

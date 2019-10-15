@@ -1,0 +1,82 @@
+{extend name="index/public"}
+{block name="Addproductcategory"}
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>修改分类</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('Productcategory/Productcategory')}" class="actionBtn">商品分类</a>添加分类</h3>
+    <form action="{:url('Productcategory/Updateproductcategory')}" method="post">
+        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+            <tr>
+                <td width="80" align="right">分类名称</td>
+                <td>
+                    <input type="text" name="cate_name" value="{$cate.cate_name}" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">别名</td>
+                <td>
+                    <input type="text" name="cate_alias" value="{$cate.cate_alias}" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">上级分类</td>
+                <td>
+                    <select name="cate_pid">
+                        <option value="0">无</option>
+                        {foreach $cateOrder as $key=>$vo }
+                        <option value="{$vo.cate_id}" {eq name="$cate.cate_pid" value="$vo.cate_id"} selected {/eq}>{:str_repeat("　　",$vo.lever)}{$vo.cate_name}</option>
+                        {/foreach}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    是否展示
+                </td>
+                <td>
+                    <input type="radio" name="cate_status"  value="1" {eq name="$cate.cate_status" value="1"} checked {/eq}>展示
+                    <input type="radio" name="cate_status" id="" value="0" {eq name="$cate.cate_status" value="0"} checked {/eq}>不展示
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    是否添加导航
+                </td>
+                <td>
+                    <input type="radio" name="cate_is_nav" id=""  value="1" {eq name="$cate.cate_is_nav" value="1"} checked {/eq}>添加
+                    <input type="radio" name="cate_is_nav" id="" value="0" {eq name="$cate.cate_is_nav" value="0"} checked {/eq}> 不添加
+                </td>
+            </tr>
+            <tr>
+                <td align="right">关键字</td>
+                <td>
+                    <input type="text" name="cate_keywords" value="{$cate.cate_keywords}" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">简单描述</td>
+                <td>
+                    <textarea name="cate_desc" cols="60" rows="4" class="textArea">{$cate.cate_desc}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">排序</td>
+                <td>
+                    <input type="text" name="cate_order" value="{$cate.cate_order}" size="5" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <!--<input type="hidden" name="token" value="b9439ae8" />-->
+                    <input type="hidden" name="cate_id" value="{$cate.cate_id}" />
+                    <input type="submit" value="提交">
+                    <input type="reset" value="重置">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</div>
+<div class="clear"></div>
+{/block}

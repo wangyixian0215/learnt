@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>后台登录</title>
+    <meta name="author" content="DeathGhost" />
+    {load href="/static/admin/Css/style.css" /}
+    <style>
+        body{height:100%;background:#16a085;overflow:hidden;}
+        canvas{z-index:-1;position:absolute;}
+    </style>
+    {load href="/static/admin/Js/jquery.js" /}
+    {load href="/static/admin/Js/verificationNumbers.js" /}
+    {load href="/static/admin/Js/Particleground.js" /}
+    {load href="/static/admin/Js/layer/layer.js" /}
+
+    <script>
+        $(document).ready(function() {
+            var validate={
+                checkAdminName:false,
+                checkAdminPwd:false,
+                checkCode:false
+            };
+            //粒子背景特效
+            $('body').particleground({
+                dotColor: '#5cbdaa',
+                lineColor: '#5cbdaa'
+            });
+            //验证账号
+            $("#admin_name").blur(function(){
+                admin_name=$(this).val().trim();
+                //alert(admin_name);
+                if(admin_name==""){
+                    $(this).prop("placeholder","账号不能为空").css("background:red");
+                    validate.checkAdminName=false;
+                    return false;
+                }
+                if(!/^[a-zA-Z0-9]{3,12}$/.test(admin_name)){
+                    layer.alert("账号为3-12位");
+                    validate.checkAdminName=false;
+                    return false;
+                }
+                validate.checkAdminName=true;
+                return true;
+            });
+            //验证密码
+            $("#admin_pwd").blur(function(){
+                 admin_pwd=$(this).val().trim();
+                if(admin_pwd==""){
+                    $(this).prop("placeholder","密码不能为空");
+                    validate.checkAdminPwd=false;
+                    return false;
+                }
+                if(!/^[a-zA-Z0-9]{6,12}$/.test(admin_pwd)){
+                    layer.alert('密码为6-12位');
+                    $(this).append("<span class='login_txtbx'>密码为6-12位</span>");
+                    validate.checkAdminPwd=false;
+                    return false;
+                }
+                validate.checkAdminPwd=true;
+                return true;
+            });
+            //验证验证码
+            $("#code").blur(function(){
+                 code=$(this).val().trim();
+                if(code==""){
+                    $(this).prop("placeholder","验证码不能为空");
+                    validate.checkCode=false;
+                    return false;
+                }
+                validate.checkCode=true;
+                return true;
+            });
+            //七天免登陆
+            $("#re").click(function(){
+               re=$(this).prop("value");
+            });
+
+            $(".submit_btn").click(function(){
+                $("#admin_name").trigger("blur");
+                $("#admin_pwd").trigger("blur");
+                $("#code").trigger("blur");
+                if(re!==1){
+                    re=0;
+                }
+                if(!validate.checkAdminName || !validate.checkAdminPwd || !validate.checkCode){
+                   return false;
+                }
+                $.ajax({
+                    type:"post",
+                    url:"",
+                    data:{
+                        admin_name:admin_name,
+                        admin_pwd:admin_pwd,
+                        code:code,
+                        re:re
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status==1){
+                            location.href="{:url('index/index')}";
+                        }else{
+                            layer.alert(data.msg);
+                        }
+                    }
+                });
+
+            });
+        });
+    </script>
+</head>
+<body>
+<dl class="admin_login">
+    <dt>
+        <strong>站点后台管理系统</strong>
+        <em>Management System</em>
+    </dt>
+    <dd class="user_icon">
+        <input type="text" placeholder="账号" class="login_txtbx" id="admin_name"/>
+    </dd>
+    <dd class="pwd_icon">
+        <input type="password" placeholder="密码" class="login_txtbx" id="admin_pwd"/>
+    </dd>
+    <dd >
+        <img src="{:url('login/code')}" alt="captcha" width="100" height="50" />
+    </dd>
+    <dd class="val_icon" >
+            <input type="text" placeholder="验证码" id="code" class="login_txtbx" width="200">
+    </dd>
+    <dd class="pwd_icon">
+        <input type="checkbox" name="re" value="1" id="re"/>记住密码
+    </dd>
+    <dd>
+        <input type="button" value="立即登陆" class="submit_btn"/>
+    </dd>
+    <dd>
+        <p>© 2015-2016 DeathGhost 版权所有</p>
+        <p>陕B2-20080224-1</p>
+    </dd>
+</dl>
+</body>
+</html>

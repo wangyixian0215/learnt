@@ -1,0 +1,73 @@
+{extend name="index/public"}
+{block name="Addproductcategory"}
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>添加权限</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('Productcategory/Productcategory')}" class="actionBtn">权限管理</a>添加权限</h3>
+    <form action="{:url('Node/addNode')}" method="post">
+        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+            <tr>
+                <td width="80" align="right">权限名称</td>
+                <td>
+                    <input type="text" name="node_name" value="" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">权限描述</td>
+                <td>
+                    <input type="text" name="node_desc" value=""  class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">上级权限</td>
+                <td>
+                    <select name="node_pid">
+                        <option value="0">无</option>
+                        {foreach $orderNode as $key=>$vo}
+                        <option value="{$vo.node_id}">{:str_repeat("　　",$vo.node_level)}{$vo.node_name}</option>
+                        {/foreach}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    是否菜单
+                </td>
+                <td>
+                    <input type="radio" name="node_ismenue" id="" checked value="1">展示
+                    <input type="radio" name="node_ismenue" id="" value="0">不展示
+                </td>
+            </tr>
+            <tr>
+                <td align="right">权限控制器</td>
+                <td>
+                    <input type="text" name="node_controller" value="" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">权限方法</td>
+                <td>
+                    <input type="text" name="node_action" value="" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">权限路径</td>
+                <td>
+                    <input type="text" name="node_url" value=""  class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <!--<input type="hidden" name="token" value="b9439ae8" />-->
+                    <!--<input type="hidden" name="cat_id" value="" />-->
+                    <input type="submit" value="提交">
+                    <input type="reset" value="重置">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</div>
+<div class="clear"></div>
+{/block}

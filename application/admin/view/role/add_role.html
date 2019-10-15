@@ -1,0 +1,91 @@
+{extend name="index/public"}
+{block name="Addproductcategory"}
+<script>
+    $(function(){
+        $('.parent').click(function(){
+           $(this).parent().next().children().prop("checked","checked");
+        });
+        $('.son').click(function(){
+            $(this).parent().prev().children().prop("checked","checked");
+        });
+
+        $("input[name='button']").click(function(){
+            var role_name=$("input[name='role_name']").val().trim();
+            var role_desc=$("input[name='role_desc']").val().trim();
+            var node_id=[];//定义一个数组
+            $("input[name='node_id']:checked").each(function(){
+                node_id.push($(this).val());//将选中的值添加到数组chk_value中
+            });
+            $.ajax({
+                type:"post",
+                url:"",
+                data:{
+                    role_name:role_name,
+                    role_desc:role_desc,
+                    node_id:node_id
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.status==1){
+                        window.location.href="{:url('showRole')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+
+                }
+            });
+        });
+
+    });
+</script>
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>添加权限</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('Role/showRole')}" class="actionBtn">角色管理</a>添加角色</h3>
+    <!--<form action="{:url('Role/addRole')}" method="post">-->
+        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+            <tr>
+                <td width="80" align="right">角色名称</td>
+                <td>
+                    <input type="text" name="role_name" value=""  class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">角色描述</td>
+                <td>
+                    <input type="text" name="role_desc" value=""  class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="left" colspan="2">添加权限</td>
+            </tr>
+            {foreach $node as $key=>$vo}
+            <tr>
+                {eq name="$vo.node_pid" value="0"}
+             <td><input class="parent" type="checkbox" name="node_id" id="" value="{$vo.node_id}">{$vo.node_name}</td>
+                {/eq}
+              <td>
+                  {foreach $vo['child'] as $k=>$val}
+                  <input class="son" type="checkbox" name="node_id" id="" value="{$val.node_id}">{$val.node_name}
+                {/foreach}
+              </td>
+
+            </tr>
+            {/foreach}
+            <tr>
+                <td></td>
+                <td>
+                    <!--<input type="hidden" name="token" value="b9439ae8" />-->
+                    <!--<input type="hidden" name="cat_id" value="" />-->
+                    <input type="button" value="提交" name="button">
+                    <!--<input type="submit" value="提交">-->
+                    <input type="reset" value="重置">
+                </td>
+            </tr>
+        </table>
+        <!--</form>-->
+</div>
+
+</div>
+<div class="clear"></div>
+{/block}

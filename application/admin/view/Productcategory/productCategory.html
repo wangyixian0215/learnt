@@ -1,0 +1,102 @@
+{extend name="index/public"}
+{block name="productCategory"}
+<script>
+    $(function(){
+       //展开
+//        $("tbody tr[cate_pid!='0']").hide();
+//        alert(2);
+//        $(".cateShow").toggle(function(){
+//            alert(1);
+//            var cate_id=$(this).parents("tr").attr("cate_id");
+//            $("tbody tr[cate_pid = '"+cate_id+"']").show();
+//        },function(){
+//            var cate_id=$(this).parents("tr").attr("cate_id");
+//            $("tbody tr[cate_pid = '"+cate_id+"']").hide();
+//        });
+        //显示更多信息
+        $(document).on("click",".moreInfo",function(){
+            //alert(6);
+            var cate_keywords=$(this).attr("cate_keywords");
+            var cate_desc=$(this).attr("cate_desc");
+            layer.tab({
+                area: ['600px', '300px'],
+                tab: [{
+                    title: '更多信息',
+                    content: "<table class='tableBasic'>" +
+                    "<tr><th>分类关键字</th><th>分类描述</th></tr>" +
+                    " <tr>  " +
+                    "<td>"+cate_keywords+"</td> " +
+                    "<td>"+cate_desc+"</td> " +
+                    "</tr>"
+                }]
+            });
+        });
+        //删除分类
+        $(".del").click(function(){
+           var cate_id=parseInt($(this).attr("cate_id"));
+            $.ajax({
+                type:"post",
+                url:"{:url('Productcategory/Delproductcategory')}",
+                data:{
+                    cate_id:cate_id
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.status==1){
+                        window.location.reload();
+                    }
+                }
+
+            });
+        });
+    });
+</script>
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>商品分类</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('Productcategory/Addproductcategory')}" class="actionBtn add">添加分类</a>商品分类</h3>
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+        <thead>
+        <tr>
+            <th>展开</th>
+            <th>分类名称</th>
+            <th>别名</th>
+            <th>是否展示</th>
+            <th>是否导航</th>
+            <th>排序</th>
+            <th>更多信息</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $cate as $key=>$vo}
+        <tr cate_id="{$vo.cate_id}" cate_pid="{$vo.cate_pid}" >
+            <td><a href="javascript:void(0)" class="cateShow"></a></td>
+            <td> <a href="product.php?cat_id=1">{:str_repeat("　　",$vo.lever)}{$vo.cate_name}</a></td>
+            <td>{$vo.cate_alias}</td>
+            <td>{eq name="$vo.cate_status" value="1"}
+                展示
+                {else/}
+                不展示
+                {/eq}</td>
+            <td>
+                {eq name="$vo.cate_is_nav" value="1"}
+                添加到导航
+                {else/}
+                不添加到导航
+                {/eq}
+            </td>
+            <td>
+                {$vo.cate_order}
+            </td>
+            <td><a cate_keywords="{$vo.cate_keywords}" cate_desc="{$vo.cate_desc}" href="javascript:void(0)" class="moreInfo">更多详细</a></td>
+            <td><a href="{:url('Productcategory/Updateproductcategory')}?cate_id={$vo.cate_id}">编辑</a> | <a href="javascript:void(0)" cate_id="{$vo.cate_id}" class="del">删除</a></td>
+        </tr>
+        {/foreach}
+        </tbody>
+
+    </table>
+</div>
+</div>
+<div class="clear"></div>
+{/block}
