@@ -1,0 +1,61 @@
+{extend name="index/public"}
+{block name="productCategory"}
+<script>
+    $(function(){
+        //删除管理员
+        $(".del").click(function(){
+            var admin_id=parseInt($(this).attr("admin_id"));
+            $.ajax({
+                type:"post",
+                url:"{:url('Admin/delAdmin')}",
+                data:{
+                    admin_id:admin_id
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.status==1){
+                        window.location.reload();
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                }
+
+            });
+        });
+    });
+</script>
+
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>管理员管理</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('Admin/add')}" class="actionBtn add">添加管理员</a>管理员管理</h3>
+    <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+        <thead>
+        <tr>
+            <th>管理员名</th>
+            <th>电话</th>
+            <th>Email</th>
+            <th>登陆时间</th>
+            <th>登陆ip</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $admin as $k=>$v}
+        <tr>
+            <td>{$v.admin_name}</td>
+            <td>{$v.admin_tel}</td>
+            <td>{$v.admin_email}</td>
+            <td>{:date("Y-m-d H:i:s",$v.admin_login_time)}</td>
+            <td>{$v.admin_login_ip}</td>
+            <td><a href="{:url('Admin/update')}?admin_id={$v.admin_id}">编辑权限</a> | <a href="javascript:void(0)" class="del" admin_id="{$v.admin_id}">删除</a></td>
+        </tr>
+        {/foreach}
+
+        </tbody>
+
+    </table>
+</div>
+</div>
+<div class="clear"></div>
+{/block}

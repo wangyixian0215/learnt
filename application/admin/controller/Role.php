@@ -14,7 +14,7 @@ class Role extends Common
      *
      * @return \think\Response
      */
-    public function showRole()
+    public function index()
     {
         //查询数据
         $role=\app\admin\model\Role::role();
@@ -29,7 +29,7 @@ class Role extends Common
         }
         return view()->assign("role",$role);
     }
-    public function addRole(){
+    public function add(){
         if(request()->isGet()){
             //查询权限
             $node=Node::showNode();

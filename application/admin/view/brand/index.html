@@ -31,12 +31,12 @@
 //                }]
 //            });
 //        });
-        //删除分类
+        //删除品牌
         $(".del").click(function(){
             var brand_id=parseInt($(this).attr("brand_id"));
             $.ajax({
                 type:"post",
-                url:"{:url('Productbrand/Delproductbrand')}",
+                url:"{:url('Brand/delete')}",
                 data:{
                     brand_id:brand_id
                 },
@@ -54,7 +54,7 @@
 <div id="dcMain">
     <!-- 当前位置 -->
     <div id="urHere">DouPHP 管理中心<b>></b><strong>商品品牌</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
-    <h3><a href="{:url('Productbrand/Addproductbrand')}" class="actionBtn add">添加品牌</a>商品品牌</h3>
+    <h3><a href="{:url('Brand/add')}" class="actionBtn add">添加品牌</a>商品品牌</h3>
     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
         <thead>
         <tr>
@@ -78,7 +78,7 @@
             </td>
             <td>{$v.brand_order}</td>
             <td>{$v.brand_url}</td>
-            <td><a href="{:url('Productbrand/Updateproductbrand')}?brand_id={$v.brand_id}">编辑</a> | <a href="javascript:void(0)" class="del" brand_id="{$v.brand_id}">删除</a></td>
+            <td><a href="{:url('Brand/update')}?brand_id={$v.brand_id}">编辑</a> | <a href="javascript:void(0)" class="del" brand_id="{$v.brand_id}">删除</a></td>
         </tr>
         {/foreach}
         </tbody>

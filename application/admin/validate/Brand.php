@@ -26,8 +26,8 @@ class Brand extends Validate
      * @var array
      */
     protected $message = [
-        'admin_name.require'=>'品牌名称不能为空',
-        'admin_name.unique'=>'品牌名称已存在',
+        'brand_name.require'=>'品牌名称不能为空',
+        'brand_name.unique'=>'品牌名称已存在',
 
     ];
 }

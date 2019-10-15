@@ -16,7 +16,7 @@ class Cate extends Validate
      * @var array
      */
     protected $rule = [
-        "cate_name"=>"require|regex:/^.{1,12}$/",
+        "cate_name"=>"require|regex:/^.{1,12}$/|unique:cate",
         "cate_alias"=>"require|regex:/^.{1,12}$/",
         "cate_order"=>"require"
     ];
@@ -30,6 +30,7 @@ class Cate extends Validate
     protected $message = [
         'cate_name.require'=>'分类名称不能为空',
         'cate_name.regex'=>'分类名称为1-12',
+        'cate_name.unique'=>"分类名称已经存在",
         'cate_alias.require'=>'别名不能为空',
         'cate_alias.regex'=>'别名为1-12位',
         'cate_order.require'=>'排序不能为空'

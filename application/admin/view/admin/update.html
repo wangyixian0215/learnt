@@ -20,7 +20,7 @@
                 dataType:"json",
                 success:function(data){
                     if(data.status==1){
-                        window.location.href="{:url('Admin/showAdmin')}";
+                        window.location.href="{:url('Admin/index')}";
                     }else{
                         layer.alert(data.msg);
                     }

@@ -4,7 +4,7 @@
 <div id="dcMain">
     <!-- 当前位置 -->
     <div id="urHere">DouPHP 管理中心<b>></b><strong>角色管理</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
-    <h3><a href="{:url('Role/addRole')}" class="actionBtn add">添加角色</a>角色管理</h3>
+    <h3><a href="{:url('Role/add')}" class="actionBtn add">添加角色</a>角色管理</h3>
     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
         <thead>
         <tr>
@@ -26,7 +26,7 @@
                     {/foreach}
                 {/foreach}
             </td>
-            <td><a href="{:url('Productcategory/Updateproductcategory')}">编辑</a> | <a href="javascript:void(0)" class="del">删除</a></td>
+            <td><a href="{:url('Role/update')}">编辑</a> | <a href="javascript:void(0)" class="del">删除</a></td>
         </tr>
         {/foreach}
 

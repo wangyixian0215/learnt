@@ -14,7 +14,7 @@ class Node extends Validate
      */	
 	protected $rule = [
         'node_name'=>'require|unique:node',
-        'node_url'=>'require'
+//        'node_controller'=>'require'
     ];
     
     /**
@@ -26,6 +26,6 @@ class Node extends Validate
     protected $message = [
         'node_name.require'=>"权限名称不能为空",
         'node_name.unique'=>'权限名称已经存在',
-        'node_url,require'=>'权限路径不能为空'
+//        'node_controller,require'=>'权限路径不能为空'
     ];
 }

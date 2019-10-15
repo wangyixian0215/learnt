@@ -10,7 +10,7 @@ use app\admin\model\Log;
 
 class Node extends Common
 {
-    public function showNode()
+    public function index()
     {
         //查询权限
         $node=\app\admin\model\Node::showNode();
@@ -18,7 +18,7 @@ class Node extends Common
         //var_dump($orderNode);
         return view()->assign("node",$orderNode);
     }
-    public function addNode(){
+    public function add(){
         if(request()->isGet()){
             //查询权限名称
             $node=\app\admin\model\Node::showNode();
@@ -44,7 +44,7 @@ class Node extends Common
                     "log_time"=>time()
                 ];
                 $logModel->save($log);
-                $this->success("添加权限成功","showNode");
+                $this->success("添加权限成功","index");
             }else{
                 $this->error("添加权限失败");
             }

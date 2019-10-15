@@ -15,14 +15,22 @@ class Admin extends Common
      *
      * @return \think\Response
      */
-    public function showAdmin()
+    public function index()
     {
         //查询admin
-        $admin=\app\admin\model\Admin::select();
+        $admin=\app\admin\model\Admin::select()->toArray();
+        //查权限
+        foreach($admin as $k=>$v){
+            $v['role_id']=explode(",",$v['role_id']);
+        }
+//        $admin['role_id']=explode(",",$admin['role_id']);
+//        foreach($admin['role_id'] as $k=>$v){
+//            $admin['role_name'][]=$v;
+//        }
         return view()->assign("admin",$admin);
 
     }
-    public function addAdmin(){
+    public function add(){
         if(request()->isGet()){
             //查询角色
             $role=Role::select();
@@ -41,9 +49,14 @@ class Admin extends Common
             if(isset($admin['role_id'])){
                 $admin['role_id']=implode(",",$admin['role_id']);
             }
+            $admin['admin_salt']=substr(uniqid(),-4);
+            $admin['admin_pwd']=md5(md5($admin['admin_pwd']).$admin['admin_salt']);
+            $admin['admin_add_time']=time();
             //var_dump($admin);
             //入库
-            if($admin=\app\admin\model\Admin::addAdmin($admin)){
+            $adminModel=new \app\admin\model\Admin();
+            $admins=$adminModel->save($admin);
+            if($admins){
                 $logModel=new Log();
                 $log=[
                     "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
@@ -58,7 +71,7 @@ class Admin extends Common
             }
         }
     }
-    public function updateAdmin(){
+    public function update(){
         if(request()->isGet()){
             $role=Role::select();
             $admin_id=request()->get("admin_id");
@@ -91,6 +104,29 @@ class Admin extends Common
             }else{
                 echo json_encode(["status"=>2,"msg"=>"修改数据失败"]);
             }
+        }
+    }
+    public function delAdmin(){
+        $admin_id=intval(request()->post("admin_id",0));
+        if($admin_id==0){
+            $this->error("非法请求");
+        }
+        //删除
+        $adminModel=new \app\admin\model\Admin();
+        $admin=$adminModel->get($admin_id);
+        if($admin->delete()){
+            //添加日志
+            $logModel=new Log();
+            $log=[
+                "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
+                "admin_ip"=>$_SERVER['REMOTE_ADDR'],
+                "log_content"=>"删除".$admin['admin_name']."管理员",
+                "log_time"=>time()
+            ];
+            $logModel->save($log);
+            echo json_encode(["status"=>1,"msg"=>"ok"]);
+        }else{
+            echo json_encode(["status"=>0,"msg"=>"no"]);
         }
     }
 

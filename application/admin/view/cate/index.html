@@ -2,7 +2,7 @@
 {block name="productCategory"}
 <script>
     $(function(){
-       //展开
+        //展开
 //        $("tbody tr[cate_pid!='0']").hide();
 //        alert(2);
 //        $(".cateShow").toggle(function(){
@@ -33,10 +33,10 @@
         });
         //删除分类
         $(".del").click(function(){
-           var cate_id=parseInt($(this).attr("cate_id"));
+            var cate_id=parseInt($(this).attr("cate_id"));
             $.ajax({
                 type:"post",
-                url:"{:url('Productcategory/Delproductcategory')}",
+                url:"{:url('Cate/delete')}",
                 data:{
                     cate_id:cate_id
                 },
@@ -54,7 +54,7 @@
 <div id="dcMain">
     <!-- 当前位置 -->
     <div id="urHere">DouPHP 管理中心<b>></b><strong>商品分类</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
-    <h3><a href="{:url('Productcategory/Addproductcategory')}" class="actionBtn add">添加分类</a>商品分类</h3>
+    <h3><a href="{:url('Cate/add')}" class="actionBtn add">添加分类</a>商品分类</h3>
     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
         <thead>
         <tr>
@@ -90,7 +90,7 @@
                 {$vo.cate_order}
             </td>
             <td><a cate_keywords="{$vo.cate_keywords}" cate_desc="{$vo.cate_desc}" href="javascript:void(0)" class="moreInfo">更多详细</a></td>
-            <td><a href="{:url('Productcategory/Updateproductcategory')}?cate_id={$vo.cate_id}">编辑</a> | <a href="javascript:void(0)" cate_id="{$vo.cate_id}" class="del">删除</a></td>
+            <td><a href="{:url('Cate/update')}?cate_id={$vo.cate_id}">编辑</a> | <a href="javascript:void(0)" cate_id="{$vo.cate_id}" class="del">删除</a></td>
         </tr>
         {/foreach}
         </tbody>
