@@ -2,12 +2,13 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\Log;
 use app\admin\model\Role;
 use think\Controller;
 use think\facade\Session;
 use think\Request;
 
-class Admin extends Controller
+class Admin extends Common
 {
     /**
      * 显示资源列表
@@ -43,6 +44,14 @@ class Admin extends Controller
             //var_dump($admin);
             //入库
             if($admin=\app\admin\model\Admin::addAdmin($admin)){
+                $logModel=new Log();
+                $log=[
+                    "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
+                    "admin_ip"=>$_SERVER['REMOTE_ADDR'],
+                    "log_content"=>"添加了".$admin['admin_name']."管理员",
+                    "log_time"=>time()
+                ];
+                $logModel->save($log);
                 echo json_encode(["status"=>1,"msg"=>"ok"]);
             }else{
                 echo json_encode(["status"=>2,"msg"=>"添加数据失败"]);
@@ -68,8 +77,16 @@ class Admin extends Controller
             if(isset($admin['role_id'])){
                 $admin['role_id']=implode(",",$admin['role_id']);
             }
-            $admin=\app\admin\model\Admin::updateRole($admin);
-            if($admin){
+            $admins=\app\admin\model\Admin::updateRole($admin);
+            if($admins){
+                $logModel=new Log();
+                $log=[
+                    "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
+                    "admin_ip"=>$_SERVER['REMOTE_ADDR'],
+                    "log_content"=>"修改了".$admin['admin_name']."管理员权限",
+                    "log_time"=>time()
+                ];
+                $logModel->save($log);
                 echo json_encode(["status"=>1,"msg"=>"ok"]);
             }else{
                 echo json_encode(["status"=>2,"msg"=>"修改数据失败"]);

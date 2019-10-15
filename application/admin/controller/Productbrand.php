@@ -9,8 +9,10 @@ namespace app\admin\controller;
 
 
 use app\admin\model\Brand;
+use app\admin\model\Log;
 use Qiniu\Auth;
 use Qiniu\Storage\UploadManager;
+use think\Session;
 
 class Productbrand extends Common{
   public function Productbrand(){
@@ -27,7 +29,7 @@ class Productbrand extends Common{
             //验证数据
             $result=$this->validate($brand,'app\admin\validate\Brand');
             if($result!==true){
-                $this->error($result);
+                echo json_encode(["status"=>2,"msg"=>$result]);
             }
             //上传到七牛云
             //判断文件大小、错误
@@ -65,12 +67,75 @@ class Productbrand extends Common{
                 //入库
                 $brand['brand_logo']=$path;
                 Brand::addBrand($brand);
+                $logModel=new Log();
+                $log=[
+                    "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
+                    "admin_ip"=>$_SERVER['REMOTE_ADDR'],
+                    "log_content"=>"添加了".$brand['brand_name']."品牌",
+                    "log_time"=>time()
+                ];
+                $logModel->save($log);
                 echo json_encode(["status" => 0, "msg" => "ok","path"=>$path]);
             } else {
                 echo json_encode(["status" => 4, "msg" => "上传失败"]);
             }
         }
 
+    }
+    public function Updateproductbrand(){
+        if(request()->isGet()){
+            //查询数据
+            $brand_id=intval(request()->get("brand_id"))?request()->get("brand_id"):0;
+            if($brand_id==0){
+                $this->error("非法请求");
+            }
+            $brandModole=new Brand();
+            $brand=$brandModole->get($brand_id)->toArray();
+            return view()->assign("brand",$brand);
+        }
+        if(request()->isPost()){
+            $brand=request()->post();
+            $result=$this->validate($brand,'app\admin\validate\Brand');
+            if($result!==true){
+                echo json_encode(["status"=>2,"msg"=>$result]);
+            }
+            $brandModole=new Brand();
+            if($brandModole->save($brand,['brand_id'=>$brand['brand_id']])){
+                $logModel=new Log();
+                $log=[
+                    "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
+                    "admin_ip"=>$_SERVER['REMOTE_ADDR'],
+                    "log_content"=>"修改了".$brand['brand_name']."品牌",
+                    "log_time"=>time()
+                ];
+                $logModel->save($log);
+                echo json_encode(["status"=>1,"msg"=>"ok"]);
+            }else{
+                echo json_encode(["status"=>0,"msg"=>"修改数据失败"]);
+            }
+        }
+    }
+    public function Delproductbrand(){
+        $brand_id=intval(request()->post("brand_id",0));
+        if($brand_id==0){
+            $this->error("非法请求");
+        }
+        //删除
+        $brand=Brand::get($brand_id);
+        if($brand->delete()){
+            //添加日志
+            $logModel=new Log();
+            $log=[
+                "admin_id"=>Session::get("admin")['admin_id'],
+                "admin_ip"=>$_SERVER['REMOTE_ADDR'],
+                "log_content"=>"删除".$brand['brand_name']."品牌",
+                "log_time"=>time()
+            ];
+            $logModel->save($log);
+            echo json_encode(["status"=>1,"msg"=>"ok"]);
+        }else{
+            echo json_encode(["status"=>0,"msg"=>"no"]);
+        }
     }
 
 }

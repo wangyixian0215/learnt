@@ -1,0 +1,91 @@
+{extend name="index/public"}
+{block name="Addproductcategory"}
+<script>
+    $(function(){
+        $("#brand").click(function(){
+            //七牛云
+            var formData=new FormData($("form[name='brand']").get(0));
+            $.ajax({
+                type:"post",
+                url: "",
+                data:formData,
+                dataType:"json",
+                processData: false,//不处理发送的数据，因为data值是FormData对象，不需要对数据做处理
+                contentType: false,//不设置Content-type请求头
+                success:function(data){
+                    if(data.status==1){
+                        window.location.href="{:url('Productbrand')}";
+                    }else{
+                        layer.alert(data.msg);
+                    }
+                }
+
+            });
+        });
+
+    });
+</script>
+<div id="dcMain">
+    <!-- 当前位置 -->
+    <div id="urHere">DouPHP 管理中心<b>></b><strong>添加品牌</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+    <h3><a href="{:url('Productbrand/Productbrand')}" class="actionBtn">商品品牌</a>添加品牌</h3>
+    <form name="brand">
+        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+            <tr>
+                <td width="80" align="right">品牌名称</td>
+                <td>
+                    <input type="text" name="brand_name" value="{$brand.brand_name}" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">品牌logo</td>
+                <td>
+                    <img src="{$brand.brand_logo}" alt="">
+                    <input type="text" name="brand_logo" id="" value="{$brand.brand_logo}" hidden>
+                    <!--<input type="file" name="brand_logo" id=""  value="">-->
+                    <!--<input type="text" name="cate_alias" value="" size="40" class="inpMain" />-->
+                </td>
+            </tr>
+            <tr>
+                <td width="80" align="right">品牌描述</td>
+                <td>
+                    <input type="text" name="brand_desc" value="{$brand.brand_desc}" size="40" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    是否展示
+                </td>
+                <td>
+                    <input type="radio" name="brand_status" id=""  value="1" {if $brand.brand_status==1} checked {/if}>展示
+                    <input type="radio" name="brand_status" id="" value="0" {if $brand.brand_status==0} checked {/if} >不展示
+                </td>
+            </tr>
+            <tr>
+                <td align="right">排序</td>
+                <td>
+                    <input type="text" name="brand_order" value="{$brand.brand_order}" size="5" class="inpMain" />
+                </td>
+            </tr>
+            <tr>
+                <td width="80" align="right">品牌url</td>
+                <img src="{$brand.brand_logo}" alt="">
+                <td> <input type="text" name="brand_url" value="{$brand.brand_url}"  class="inpMain" /></td>
+            </tr>
+            <input type="text" name="brand_id" id="" value="{$brand.brand_id}" hidden>
+            <tr>
+
+                <td></td>
+                <td>
+                    <!--<input type="hidden" name="token" value="b9439ae8" />-->
+                    <!--<input type="hidden" name="cat_id" value="" />-->
+                    <span id="brand">提交</span>
+                    <input type="reset" value="重置">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</div>
+<div class="clear"></div>
+{/block}

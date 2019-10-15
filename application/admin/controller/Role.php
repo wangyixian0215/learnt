@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\Log;
 use app\admin\model\Node;
 use think\Controller;
 use think\Request;
@@ -50,7 +51,15 @@ class Role extends Common
             }
             //入库
             if($role=\app\admin\model\Role::addRole($role)){
-                var_dump($role);
+                //var_dump($role);
+                $logModel=new Log();
+                $log=[
+                    "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
+                    "admin_ip"=>$_SERVER['REMOTE_ADDR'],
+                    "log_content"=>"添加了".$role['role_name']."角色",
+                    "log_time"=>time()
+                ];
+                $logModel->save($log);
                 echo json_encode(["status"=>1,"msg"=>"ok"]);
             }else{
                 echo json_encode(["status"=>2,"msg"=>"添加数据失败"]);

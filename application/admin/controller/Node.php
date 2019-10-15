@@ -6,6 +6,8 @@
  * Time: 11:58
  */
 namespace app\admin\controller;
+use app\admin\model\Log;
+
 class Node extends Common
 {
     public function showNode()
@@ -34,6 +36,14 @@ class Node extends Common
             }
             //入库
             if($node=\app\admin\model\Node::addNode($node)){
+                $logModel=new Log();
+                $log=[
+                    "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
+                    "admin_ip"=>$_SERVER['REMOTE_ADDR'],
+                    "log_content"=>"添加了".$node['node_name']."权限",
+                    "log_time"=>time()
+                ];
+                $logModel->save($log);
                 $this->success("添加权限成功","showNode");
             }else{
                 $this->error("添加权限失败");
