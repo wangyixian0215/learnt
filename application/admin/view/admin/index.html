@@ -35,8 +35,10 @@
             <th>管理员名</th>
             <th>电话</th>
             <th>Email</th>
-            <th>登陆时间</th>
+            <th>上次登陆时间</th>
             <th>登陆ip</th>
+            <th>所拥有的角色</th>
+            <th>所拥有的权限</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -48,6 +50,18 @@
             <td>{$v.admin_email}</td>
             <td>{:date("Y-m-d H:i:s",$v.admin_login_time)}</td>
             <td>{$v.admin_login_ip}</td>
+            <td>
+                {foreach $v->role as $k1=>$v1}
+                    {$v1->role_name}
+                {/foreach}
+            </td>
+            <td>
+                {foreach $v->role as $k2=>$v2}
+                    {foreach $v2->node as $k3=>$v3}
+                        {$v3->node_name},
+                    {/foreach}
+                {/foreach}
+            </td>
             <td><a href="{:url('Admin/update')}?admin_id={$v.admin_id}">编辑权限</a> | <a href="javascript:void(0)" class="del" admin_id="{$v.admin_id}">删除</a></td>
         </tr>
         {/foreach}

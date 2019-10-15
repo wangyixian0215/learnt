@@ -7,23 +7,22 @@
  */
 namespace app\admin\controller;
 use app\admin\model\Log;
+use app\admin\service\NodeService;
 
 class Node extends Common
 {
     public function index()
     {
         //查询权限
-        $node=\app\admin\model\Node::showNode();
-        $orderNode=\app\admin\model\Node::orderNode($node);
-        //var_dump($orderNode);
+        $node=new NodeService();
+        $orderNode=$node->getNodeOrder(\app\admin\model\Node::all());
         return view()->assign("node",$orderNode);
     }
     public function add(){
         if(request()->isGet()){
             //查询权限名称
-            $node=\app\admin\model\Node::showNode();
-            $orderNode=\app\admin\model\Node::orderNode($node);
-            //var_dump($orderNode);
+            $node=new NodeService();
+            $orderNode=$node->getNodeOrder(\app\admin\model\Node::all());
             return view()->assign("orderNode",$orderNode);
         }
         if(request()->isPost()){
@@ -35,7 +34,8 @@ class Node extends Common
                 $this->error($result);
             }
             //入库
-            if($node=\app\admin\model\Node::addNode($node)){
+            $nodeModel=new \app\admin\model\Node();
+            if($nodes= $nodeModel->save($node)){
                 $logModel=new Log();
                 $log=[
                     "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
@@ -48,7 +48,12 @@ class Node extends Common
             }else{
                 $this->error("添加权限失败");
             }
-
         }
+    }
+    public function update(){
+        echo "权限修改";
+    }
+    public function delete(){
+        echo "权限删除";
     }
 }

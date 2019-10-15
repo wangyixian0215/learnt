@@ -20,13 +20,13 @@
         <tbody>
         {foreach $node as $key=>$vo}
         <tr>
-            <td>{:str_repeat("　　",$vo.node_level)}{$vo.node_name}</td>
+            <td>{:str_repeat("　　",$vo.level)}{$vo.node_name}</td>
             <td>{$vo.node_desc}</td>
             <td>{eq name="$vo.node_ismenue" value="1"}展示{else/}不展示{/eq}</td>
             <td>{$vo.node_controller}</td>
             <td>{$vo.node_action}</td>
             <td>{$vo.node_url}</td>
-            <td><a href="{:url('Productcategory/Updateproductcategory')}">编辑</a> | <a href="javascript:void(0)" class="del">删除</a></td>
+            <td><a href="{:url('Node/update')}">编辑</a> | <a href="javascript:void(0)" class="del">删除</a></td>
         </tr>
         {/foreach}
 

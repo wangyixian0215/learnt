@@ -10,35 +10,22 @@ use think\Request;
 
 class Admin extends Common
 {
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
     public function index()
     {
         //查询admin
-        $admin=\app\admin\model\Admin::select()->toArray();
-        //查权限
-        foreach($admin as $k=>$v){
-            $v['role_id']=explode(",",$v['role_id']);
-        }
-//        $admin['role_id']=explode(",",$admin['role_id']);
-//        foreach($admin['role_id'] as $k=>$v){
-//            $admin['role_name'][]=$v;
-//        }
+        $adminModel=new \app\admin\model\Admin();
+        $admin=$adminModel->all();
         return view()->assign("admin",$admin);
 
     }
     public function add(){
         if(request()->isGet()){
             //查询角色
-            $role=Role::select();
+            $role=Role::all();
             return view()->assign("role",$role);
         }
         if(request()->isPost()){
             $admin=request()->post();
-            //var_dump($admin);
             //验证数据
             $result=$this->validate($admin,'app\admin\validate\Admin.add');
             if($result!==true){
@@ -46,17 +33,12 @@ class Admin extends Common
                 exit;
             }
           unset($admin['admin_repwd']);
-            if(isset($admin['role_id'])){
-                $admin['role_id']=implode(",",$admin['role_id']);
-            }
             $admin['admin_salt']=substr(uniqid(),-4);
             $admin['admin_pwd']=md5(md5($admin['admin_pwd']).$admin['admin_salt']);
             $admin['admin_add_time']=time();
-            //var_dump($admin);
             //入库
             $adminModel=new \app\admin\model\Admin();
-            $admins=$adminModel->save($admin);
-            if($admins){
+            if($adminModel->save($admin) && $adminModel->role()->save($admin['role_id'])){
                 $logModel=new Log();
                 $log=[
                     "admin_id"=>\think\facade\Session::get("admin")['admin_id'],
@@ -73,15 +55,12 @@ class Admin extends Common
     }
     public function update(){
         if(request()->isGet()){
-            $role=Role::select();
+            $role=Role::all();
             $admin_id=request()->get("admin_id");
             //查权限
-            $admin=\app\admin\model\Admin::getRole($admin_id);
-            //var_dump($admin);
-            $admin['role_id']=explode(",",$admin['role_id']);
-            foreach($admin['role_id'] as $k=>$v){
-                $admin['role_name'][]=$v;
-            }
+            $adminModel=new \app\admin\model\Admin();
+            $admin=$adminModel->get($admin_id);
+
             return view()->assign("admin",$admin)->assign("role",$role);
         }
         if(request()->isPost()){

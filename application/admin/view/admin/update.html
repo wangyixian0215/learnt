@@ -50,8 +50,8 @@
             <td>
                 {foreach $role as $k=>$v}
                 <input type="checkbox" name="role_id" id=""  value="{$v.role_id}"
-                       {foreach $admin.role_name as $key=>$val}
-                {if $val==$v.role_id} checked {/if}
+                       {foreach $admin->role as $key=>$val}
+                {if $val->role_id==$v.role_id} checked {/if}
                 {/foreach}
                 >
                 {$v.role_name}

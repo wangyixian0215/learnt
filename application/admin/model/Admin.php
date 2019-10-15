@@ -33,4 +33,9 @@ class Admin extends Model{
     public static function updateRole($admin){
         return self::where(["admin_id"=>$admin['admin_id']])->update($admin);
     }
+    //模型关联
+    public function role()
+    {
+        return $this->belongsToMany('Role');
+    }
 }
